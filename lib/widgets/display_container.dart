@@ -1,6 +1,5 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class DisplayContainer extends StatelessWidget {
@@ -9,32 +8,43 @@ class DisplayContainer extends StatelessWidget {
       required this.title,
       required this.desc,
       required this.name,
-      required this.imageAddress});
+      required this.imageAddress,
+      required this.onPressed});
 
   final String title;
   final String desc;
   final String name;
   final String imageAddress;
+  final void Function() onPressed;
 
   @override
   Widget build(BuildContext context) {
     late Widget image;
     if (imageAddress == "assets/images/gemini_logo.svg") {
-      image = SvgPicture.asset(
-        imageAddress,
-        width: 60,
-        height: 60,
+      image = Hero(
+        tag: 1,
+        child: CircleAvatar(
+          radius: 32,
+          backgroundColor: Colors.white,
+          child: SvgPicture.asset(
+            imageAddress,
+            width: 44,
+            height: 44,
+          ),
+        ),
       );
     } else {
-      image = Image.asset(
-        imageAddress,
-        width: 60,
-        height: 60,
-        fit: BoxFit.cover,
+      image = const Hero(
+        tag: 0,
+        child: CircleAvatar(
+          radius: 30,
+          backgroundColor: Colors.white,
+          foregroundImage: AssetImage("assets/images/chatgpt_title.png"),
+        ),
       );
     }
     return Container(
-      height: 276,
+      width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
         color: const Color.fromARGB(40, 253, 253, 253),
         border: Border.all(
@@ -45,7 +55,7 @@ class DisplayContainer extends StatelessWidget {
         borderRadius: BorderRadius.circular(40),
         clipBehavior: Clip.antiAlias,
         child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+          filter: ImageFilter.blur(),
           child: Container(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
             width: MediaQuery.of(context).size.width,
@@ -90,7 +100,7 @@ class DisplayContainer extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                             side: const BorderSide(width: 2))),
-                    onPressed: () {},
+                    onPressed: onPressed,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       mainAxisSize: MainAxisSize.min,
