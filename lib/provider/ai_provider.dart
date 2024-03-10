@@ -16,3 +16,5 @@ getAPI() async {
       .get();
   return body.data()!['api'];
 }
+
+final textProvider = StateProvider((ref) => "");

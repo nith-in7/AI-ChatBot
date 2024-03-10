@@ -1,7 +1,7 @@
 class Chat {
   Chat({required this.from, required this.text}) : date = DateTime.now();
   final From from;
-  final String text;
+  String text;
   final DateTime date;
 }
 
