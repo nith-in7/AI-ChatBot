@@ -1,3 +1,5 @@
+import 'package:ai_chat/widgets/chat_screen_widgets/chatgpt_tab_window.dart';
+import 'package:ai_chat/widgets/chat_screen_widgets/gemini_tab_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -78,7 +80,13 @@ class _ChatScreenState extends State<ChatScreen>
         automaticallyImplyLeading: false,
         leading: IconButton.filled(
             style: IconButton.styleFrom(backgroundColor: Colors.white),
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              final currentFocus = FocusScope.of(context);
+              if (!currentFocus.hasPrimaryFocus) {
+                currentFocus.unfocus();
+              }
+              Navigator.pop(context);
+            },
             icon: const Icon(
               size: 20,
               Icons.arrow_back_ios_new_rounded,
@@ -99,41 +107,33 @@ class _ChatScreenState extends State<ChatScreen>
         controller: _tabController,
         children: [
           Container(
-            padding: const EdgeInsets.all(8),
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(colors: [
-                Color.fromARGB(255, 43, 52, 52),
-                Color.fromARGB(255, 43, 52, 52),
-                Color.fromARGB(255, 43, 52, 52),
-                Color.fromARGB(255, 48, 48, 47),
-                Color.fromARGB(255, 40, 40, 39)
-              ], begin: Alignment.topLeft, end: Alignment.bottomRight),
-            ),
-            width: double.infinity,
-            height: double.infinity,
-            child: const Text(
-              "Hello",
-              style: TextStyle(fontSize: 50, color: Colors.white),
-            ),
-          ),
+              padding: const EdgeInsets.all(8),
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(colors: [
+                  Color.fromARGB(255, 43, 52, 52),
+                  Color.fromARGB(255, 43, 52, 52),
+                  Color.fromARGB(255, 43, 52, 52),
+                  Color.fromARGB(255, 48, 48, 47),
+                  Color.fromARGB(255, 40, 40, 39)
+                ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+              ),
+              width: double.infinity,
+              height: double.infinity,
+              child: const ChatGPTWindow()),
           Container(
-            padding: const EdgeInsets.all(8),
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(colors: [
-                Color.fromARGB(255, 43, 52, 52),
-                Color.fromARGB(255, 43, 52, 52),
-                Color.fromARGB(255, 43, 52, 52),
-                Color.fromARGB(255, 48, 48, 47),
-                Color.fromARGB(255, 40, 40, 39)
-              ], begin: Alignment.topLeft, end: Alignment.bottomRight),
-            ),
-            width: double.infinity,
-            height: double.infinity,
-            child: const Text(
-              "Hello",
-              style: TextStyle(fontSize: 50, color: Colors.white),
-            ),
-          ),
+              padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(colors: [
+                  Color.fromARGB(255, 43, 52, 52),
+                  Color.fromARGB(255, 43, 52, 52),
+                  Color.fromARGB(255, 43, 52, 52),
+                  Color.fromARGB(255, 48, 48, 47),
+                  Color.fromARGB(255, 40, 40, 39)
+                ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+              ),
+              width: double.infinity,
+              height: double.infinity,
+              child: const GeminiTabWindow()),
         ],
       ),
     );

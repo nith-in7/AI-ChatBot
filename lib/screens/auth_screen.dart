@@ -1,11 +1,7 @@
-import 'dart:ui';
-
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:ai_chat/widgets/auth_screen_widgets/card_details.dart';
+import 'package:ai_chat/widgets/auth_screen_widgets/sign_in_with_google.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-
 import 'package:flutter_glow/flutter_glow.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthScreen extends StatelessWidget {
   const AuthScreen({super.key});
@@ -70,23 +66,20 @@ class AuthScreen extends StatelessWidget {
                 const SizedBox(
                   height: 20,
                 ),
-                _getContainer(
-                    icon: Icons.psychology_outlined,
-                    title:
-                        "Remembers what user said earlier in the conversation",
-                    context: context),
+                const CardDetails(
+                  icon: Icons.psychology_outlined,
+                  title: "Remembers what user said earlier in the conversation",
+                ),
                 const SizedBox(
                   height: 10,
                 ),
-                _getContainer(
-                    context: context,
+                const CardDetails(
                     icon: Icons.border_color_outlined,
                     title: "Allows user to provide follow-up corrections"),
                 const SizedBox(
                   height: 10,
                 ),
-                _getContainer(
-                    context: context,
+                const CardDetails(
                     icon: Icons.new_releases_outlined,
                     title: "Trained to decline inappropriate requests"),
                 const SizedBox(
@@ -116,82 +109,5 @@ class AuthScreen extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-Widget _getContainer({required String title, required IconData icon, context}) {
-  return Container(
-    decoration: BoxDecoration(
-        border: Border.all(
-            width: 0.3, color: const Color.fromARGB(137, 255, 255, 255)),
-        borderRadius: const BorderRadius.all(Radius.circular(36)),
-        color: const Color.fromARGB(39, 255, 255, 255)),
-    child: ClipRRect(
-      child: BackdropFilter(
-        filter: ImageFilter.blur(),
-        child: Container(
-          padding: const EdgeInsets.all(8),
-          width: 364,
-          height: 90,
-          child: Row(
-            children: [
-              Container(
-                width: 74,
-                height: 74,
-                decoration: BoxDecoration(
-                  border: Border.all(width: .5, color: Colors.black),
-                  borderRadius: BorderRadius.circular(32),
-                  color: const Color.fromARGB(167, 0, 0, 0),
-                ),
-                child: GlowIcon(
-                  offset: Offset.zero,
-                  blurRadius: 30,
-                  icon,
-                  color: Colors.white,
-                  size: 28,
-                ),
-              ),
-              const SizedBox(
-                width: 8,
-              ),
-              SizedBox(
-                  width: MediaQuery.of(context).size.width - 190,
-                  child: Text(
-                    style: const TextStyle(color: Colors.white),
-                    title,
-                    softWrap: true,
-                    maxLines: 2,
-                  ))
-            ],
-          ),
-        ),
-      ),
-    ),
-  );
-}
-
-signInWithGoogle(context) async {
-  final fireAuth = FirebaseAuth.instance;
-  GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-  if (googleUser != null) {
-    GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-    OAuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
-    try {
-      await fireAuth.signInWithCredential(credential);
-    } on FirebaseAuthException catch (e) {
-      String message;
-      if (e.code == "account-exists-with-different-credential") {
-        message = "The account already exists with a different credential";
-      } else if (e.code == "invalid-credential") {
-        message = "Error occurred while accessing credentials. Try again.";
-      } else {
-        message = "Error occurred using Google Sign In. Try again.";
-      }
-      ScaffoldMessenger.of(context).clearSnackBars();
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(message)));
-    }
   }
 }

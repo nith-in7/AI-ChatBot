@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_glow/flutter_glow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class DisplayContainer extends StatelessWidget {
@@ -44,16 +45,15 @@ class DisplayContainer extends StatelessWidget {
       );
     }
     return Container(
-      width: MediaQuery.of(context).size.width,
+      height: 273,
       decoration: BoxDecoration(
-        color: const Color.fromARGB(40, 253, 253, 253),
+        color: const Color.fromARGB(62, 26, 25, 25),
         border: Border.all(
             color: const Color.fromARGB(195, 125, 123, 123), width: 2),
         borderRadius: BorderRadius.circular(32),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(40),
-        clipBehavior: Clip.antiAlias,
         child: BackdropFilter(
           filter: ImageFilter.blur(),
           child: Container(
@@ -88,18 +88,17 @@ class DisplayContainer extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  width: 175,
+                  width: 183,
                   margin: const EdgeInsets.only(top: 20),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
                       color: Colors.white),
-                  child: FilledButton(
-                    style: FilledButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        padding: const EdgeInsets.all(12),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            side: const BorderSide(width: 2))),
+                  child: GlowButton(
+                    height: 40,
+                    spreadRadius: 1,
+                    offset: Offset.zero,
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
                     onPressed: onPressed,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
