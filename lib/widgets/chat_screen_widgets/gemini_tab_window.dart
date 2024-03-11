@@ -15,19 +15,34 @@ class GeminiTabWindow extends ConsumerStatefulWidget {
 }
 
 class _GeminiTabWindowState extends ConsumerState<GeminiTabWindow> {
+  bool allow = true;
   getGeminiResponse(WidgetRef ref, List<Content> list, String text) async {
     final apiKey = ref.read(geminiKey).toString();
-    final model = GenerativeModel(
-        apiKey: apiKey,
-        model: "gemini-pro",
-        generationConfig: GenerationConfig());
+    final chatList = ref.watch(chatListProvider.notifier);
+    try {
+      final model = GenerativeModel(
+          apiKey: apiKey,
+          model: "gemini-pro",
+          generationConfig: GenerationConfig());
 
-    final chat = model.startChat(history: list);
+      final chat = model.startChat(history: list);
 
-    final content = Content.text(text);
-    final respose = chat.sendMessageStream(content);
-    await for (final item in respose) {
-      ref.watch(chatListProvider.notifier).updateLastChat(item.text!);
+      final content = Content.text(text);
+
+      final respose = chat.sendMessageStream(content);
+      await for (final item in respose) {
+        chatList.updateLastChat(item.text!);
+      }
+    } on GenerativeAIException catch (e) {
+      chatList.updateLastChat("!!!${e.message}!!!");
+    } finally {
+      ref.read(chatListProvider).last.parts.removeAt(0);
+      if (ref.read(chatListProvider).last.parts.isEmpty) {
+        chatList.updateLastChat("Unale to generate response.");
+      }
+      setState(() {
+        allow = true;
+      });
     }
   }
 
@@ -67,11 +82,13 @@ class _GeminiTabWindowState extends ConsumerState<GeminiTabWindow> {
           ),
         ),
         TextFieldWidget(
-            enableButton: list.isNotEmpty ? list.last.role == 'model' : true,
+            enableButton: allow,
             onPressed: (String text) {
-              ref.read(textProvider.notifier).update((state) => text);
               final listRef = ref.watch(chatListProvider.notifier);
               listRef.addNewChat(Content('user', [TextPart(text)]));
+              setState(() {
+                allow = false;
+              });
               listRef.addNewChat(Content('model', [TextPart("")]));
 
               final a = ref.read(chatListProvider);

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:ai_chat/firebase_options.dart';
 import 'package:ai_chat/provider/ai_provider.dart';
 import 'package:ai_chat/screens/auth_screen.dart';
@@ -5,14 +7,17 @@ import 'package:ai_chat/screens/start_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
+// import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() async {
   final WidgetsBinding widgetsBinding =
       WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  if (Platform.isAndroid || Platform.isIOS) {
+    await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.android);
+    // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  }
   runApp(const ProviderScope(child: MyApp()));
 }
 
@@ -42,10 +47,14 @@ class MyApp extends ConsumerWidget {
           if (snapshot.hasData) {
             ref.watch(apiProvider).whenData((value) =>
                 ref.watch(geminiKey.notifier).update((state) => value));
-            
-            FlutterNativeSplash.remove();
+            if (Platform.isAndroid || Platform.isIOS) {
+              // FlutterNativeSplash.remove();
+            }
             return const StartScreen();
           } else {
+            if (Platform.isAndroid || Platform.isIOS) {
+              // FlutterNativeSplash.remove();
+            }
             return const AuthScreen();
           }
         },

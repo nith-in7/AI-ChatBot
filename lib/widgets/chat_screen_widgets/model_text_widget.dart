@@ -66,6 +66,11 @@ class ModelText extends StatelessWidget {
                   : FormattedText(
                       text,
                       formatters: [
+                        FormattedTextFormatter(
+                            patternChars: '!!!',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context).colorScheme.onError)),
                         const FormattedTextFormatter(
                             patternChars: '**',
                             style: TextStyle(fontWeight: FontWeight.bold)),

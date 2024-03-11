@@ -82,7 +82,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
                   onPressed: widget.enableButton
                       ? !isDisableButton
                           ? () {
-                              widget.onPressed(textController.text);
+                              widget.onPressed(textController.text.trim());
                               textController.clear();
                               setState(() {
                                 isDisableButton = true;

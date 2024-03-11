@@ -30,7 +30,7 @@ class ShowProfileStack extends StatelessWidget {
                   width: 1, color: const Color.fromARGB(70, 255, 255, 255)),
               borderRadius: BorderRadius.circular(32)),
           width: MediaQuery.of(context).size.width - 32,
-          height: 568,
+          height: MediaQuery.of(context).size.height,
           child: Column(
             children: [
               Row(
@@ -48,6 +48,7 @@ class ShowProfileStack extends StatelessWidget {
               Column(
                 children: [
                   LocalHero(
+                    
                     tag: 3,
                     child: Container(
                       decoration: BoxDecoration(

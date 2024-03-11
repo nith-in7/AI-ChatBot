@@ -182,7 +182,7 @@ class _StartScreenState extends ConsumerState<StartScreen>
               Visibility(
                 visible: showProfileDetails,
                 child: Positioned(
-                  top: 211,
+                  top: 185,
                   bottom: 0,
                   child: ShowProfileStack(
                     networkImage: networkImage,
