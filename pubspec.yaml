@@ -42,33 +42,27 @@ dependencies:
   flutter_glow: ^0.3.0
   google_sign_in: ^6.2.1
   flutter_riverpod: ^2.4.10
-  uuid: ^4.3.3
   google_generative_ai: ^0.2.2
-  # flutter_native_splash: ^2.3.10
   formatted_text: ^4.0.1
   cached_network_image: ^3.3.1
   shimmer: ^3.0.0
   loading_animation_widget: ^1.2.1
   dio: ^5.4.1
+  flutter_native_splash: ^2.3.10
 
 dev_dependencies:
   flutter_lints: ^3.0.0
   flutter_test:
     sdk: flutter
-  # flutter_launcher_icons: ^0.13.1
+  flutter_launcher_icons: ^0.13.1
 
-# flutter_launcher_icons:
-#   # android: "launcher_icon"
-#   adaptive_icon_background: "#2b3434"
-  
-#   ios: true
-#   image_path: "assets/images/logo.png"
-#   min_sdk_android: 21 # android min sdk min:16, default 21
-  # web:
-  #   generate: true
-  #   image_path: "assets/images/logo.png"
-  #   background_color: "#2b3434"
-  #   theme_color: "2b3434"
+flutter_launcher_icons:
+  ios: true
+  android: true
+  image_path: "assets/images/logo.png"
+  adaptive_icon_background: "#ffffff"
+  adaptive_icon_foreground: "assets/images/adaptive_logo.png"
+
 
   
 
@@ -109,9 +103,10 @@ flutter:
   # see https://flutter.dev/custom-fonts/#from-packages
 
 
-# flutter_native_splash:
-#   color: "#2b3434"
-#   image: assets/images/logo.png
-#   android_12:
-#     color: "#2b3434"
-#   web: false
+flutter_native_splash:
+  color: "#2b3434"
+  image: assets/images/logo.png
+  android_12:
+    image: assets/images/adaptive_logo.png
+    color: "#2b3434"
+  web: false

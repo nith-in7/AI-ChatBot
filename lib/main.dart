@@ -1,4 +1,9 @@
-import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_generative_ai/google_generative_ai.dart';
 
 import 'package:ai_chat/firebase_options.dart';
 import 'package:ai_chat/model/chat_model.dart';
@@ -6,20 +11,12 @@ import 'package:ai_chat/provider/ai_provider.dart';
 import 'package:ai_chat/provider/future_list_provider.dart';
 import 'package:ai_chat/screens/auth_screen.dart';
 import 'package:ai_chat/screens/start_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
-// import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_generative_ai/src/content.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  if (Platform.isAndroid || Platform.isIOS) {
-    await Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform);
-    // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  }
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
   runApp(const ProviderScope(child: MyApp()));
 }
 
@@ -45,11 +42,12 @@ class MyApp extends ConsumerWidget {
       home: StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {}
           if (snapshot.hasData) {
-            getAllApi(ref);
+            _getAllApi(ref);
+            FlutterNativeSplash.remove();
             return const StartScreen();
           } else {
+            FlutterNativeSplash.remove();
             return const AuthScreen();
           }
         },
@@ -58,7 +56,7 @@ class MyApp extends ConsumerWidget {
   }
 }
 
-getAllApi(WidgetRef ref) async {
+_getAllApi(WidgetRef ref) async {
   final gemApi = await getAPI('gemini_api');
   ref.read(geminiKey.notifier).update((state) => gemApi);
 

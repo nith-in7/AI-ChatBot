@@ -6,7 +6,7 @@ import 'package:ai_chat/widgets/auth_screen_widgets/card_details.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_glow/flutter_glow.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -130,22 +130,31 @@ class AuthScreen extends ConsumerWidget {
                     ),
                     Align(
                       alignment: Alignment.center,
-                      child: GlowButton(
-                        spreadRadius: 0.2,
-                        offset: Offset.zero,
+                      child: Container(
                         height: 50,
                         width: 364,
-                        borderRadius: BorderRadius.circular(40),
-                        color: Colors.white,
-                        onPressed: () {
-                          ref.read(authScreenLoading.notifier).update(
-                                (state) => true,
-                              );
-                          signInWithGoogle(context);
-                        },
-                        child: const Text(
-                          "Login",
-                          style: TextStyle(color: Colors.black, fontSize: 18),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(40),
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Colors.white,
+                                blurRadius: 8,
+                                spreadRadius: 1,
+                                offset: Offset.zero,
+                              )
+                            ]),
+                        child: TextButton(
+                          onPressed: () {
+                            ref.read(authScreenLoading.notifier).update(
+                                  (state) => true,
+                                );
+                            signInWithGoogle(context);
+                          },
+                          child: const Text(
+                            "Login",
+                            style: TextStyle(color: Colors.black, fontSize: 18),
+                          ),
                         ),
                       ),
                     )
