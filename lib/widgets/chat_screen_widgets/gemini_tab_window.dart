@@ -3,6 +3,8 @@ import 'package:ai_chat/provider/future_list_provider.dart';
 import 'package:ai_chat/widgets/chat_screen_widgets/model_text_widget.dart';
 import 'package:ai_chat/widgets/chat_screen_widgets/text_field_widget.dart';
 import 'package:ai_chat/widgets/chat_screen_widgets/user_text_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,10 +17,25 @@ class GeminiTabWindow extends ConsumerStatefulWidget {
 }
 
 class _GeminiTabWindowState extends ConsumerState<GeminiTabWindow> {
+  final currentUser = FirebaseAuth.instance.currentUser!;
+  late TextEditingController textController;
+  bool isDisableButton = true;
   bool allow = true;
+
+  @override
+  void initState() {
+    textController = TextEditingController();
+    textController.addListener(() {
+      setState(() {
+        isDisableButton = textController.text.trim().isEmpty;
+      });
+    });
+    super.initState();
+  }
+
   getGeminiResponse(WidgetRef ref, List<Content> list, String text) async {
     final apiKey = ref.read(geminiKey).toString();
-    final chatList = ref.watch(chatListProvider.notifier);
+    final chatList = ref.watch(geminiListProvider.notifier);
     try {
       final model = GenerativeModel(
           apiKey: apiKey,
@@ -34,21 +51,41 @@ class _GeminiTabWindowState extends ConsumerState<GeminiTabWindow> {
         chatList.updateLastChat(item.text!);
       }
     } on GenerativeAIException catch (e) {
-      chatList.updateLastChat("!!!${e.message}!!!");
+      chatList.updateLastChat(
+        e.message,
+      );
     } finally {
-      ref.read(chatListProvider).last.parts.removeAt(0);
-      if (ref.read(chatListProvider).last.parts.isEmpty) {
+      ref.read(geminiListProvider).last.parts.removeAt(0);
+      if (ref.read(geminiListProvider).last.parts.isEmpty) {
         chatList.updateLastChat("Unale to generate response.");
       }
-      setState(() {
-        allow = true;
+      FirebaseFirestore.instance
+          .collection(currentUser.uid)
+          .doc("chat")
+          .collection("gemini")
+          .doc()
+          .set({
+        'role': 'model',
+        'content': ref
+            .read(geminiListProvider)
+            .last
+            .parts
+            .whereType<TextPart>()
+            .map((e) => e.text)
+            .join(),
+        "createdAt": Timestamp.now()
       });
+      setState(
+        () {
+          allow = true;
+        },
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final list = ref.watch(chatListProvider);
+    final list = ref.watch(geminiListProvider);
     final list1 = list.reversed.toList();
 
     return Column(
@@ -62,38 +99,57 @@ class _GeminiTabWindowState extends ConsumerState<GeminiTabWindow> {
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10.0),
                   child: UserText(
-                      text: list1[index]
-                          .parts
-                          .whereType<TextPart>()
-                          .map((e) => e.text)
-                          .join('')),
+                    value: list1[index]
+                        .parts
+                        .whereType<TextPart>()
+                        .map((e) => e.text)
+                        .join(''),
+                    onPressed: (String text) {
+                      textController.text = text;
+                    },
+                  ),
                 );
               }
               return Padding(
                 padding: const EdgeInsets.only(bottom: 8.0, left: 2, right: 2),
                 child: ModelText(
-                    text: list1[index]
-                        .parts
-                        .whereType<TextPart>()
-                        .map((e) => e.text)
-                        .join('')),
+                  text: list1[index]
+                      .parts
+                      .whereType<TextPart>()
+                      .map((e) => e.text)
+                      .join(''),
+                  imgAddress: "assets/images/gemini_logo.svg",
+                ),
               );
             },
           ),
         ),
         TextFieldWidget(
-            enableButton: allow,
-            onPressed: (String text) {
-              final listRef = ref.watch(chatListProvider.notifier);
-              listRef.addNewChat(Content('user', [TextPart(text)]));
-              setState(() {
-                allow = false;
-              });
-              listRef.addNewChat(Content('model', [TextPart("")]));
+          isDisableButton: isDisableButton,
+          textController: textController,
+          enableButton: allow,
+          onPressed: (String text) {
+            FirebaseFirestore.instance
+                .collection(currentUser.uid)
+                .doc("chat")
+                .collection("gemini")
+                .doc()
+                .set({
+              'role': 'user',
+              'content': text,
+              "createdAt": Timestamp.now()
+            });
+            final listRef = ref.read(geminiListProvider.notifier);
+            listRef.addNewChat(Content('user', [TextPart(text)]));
+            setState(() {
+              allow = false;
+            });
+            listRef.addNewChat(Content('model', [TextPart("")]));
 
-              final a = ref.read(chatListProvider);
-              getGeminiResponse(ref, a.sublist(0, a.length - 2), text);
-            })
+            final a = ref.read(geminiListProvider);
+            getGeminiResponse(ref, a.sublist(0, a.length - 2), text);
+          },
+        )
       ],
     );
   }

@@ -1,6 +1,5 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter_glow/flutter_glow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class DisplayContainer extends StatelessWidget {
@@ -25,12 +24,11 @@ class DisplayContainer extends StatelessWidget {
       image = Hero(
         tag: 1,
         child: CircleAvatar(
-          radius: 32,
+          radius: 30,
           backgroundColor: Colors.white,
           child: SvgPicture.asset(
             imageAddress,
             width: 44,
-            height: 44,
           ),
         ),
       );
@@ -88,17 +86,21 @@ class DisplayContainer extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  width: 183,
+                  constraints: const BoxConstraints(minWidth: 183),
+                  
                   margin: const EdgeInsets.only(top: 20),
                   decoration: BoxDecoration(
+                      boxShadow: const [
+                        BoxShadow(
+                            color: Colors.white,
+                            blurRadius: 10,
+                            spreadRadius: 1,
+                            offset: Offset.zero)
+                      ],
                       borderRadius: BorderRadius.circular(12),
                       color: Colors.white),
-                  child: GlowButton(
-                    height: 40,
-                    spreadRadius: 1,
-                    offset: Offset.zero,
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
+                  child: TextButton(
+                    style: TextButton.styleFrom(splashFactory: NoSplash.splashFactory),
                     onPressed: onPressed,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,

@@ -142,8 +142,8 @@ class _StartScreenState extends ConsumerState<StartScreen>
                       height: 18,
                     ),
                     DisplayContainer(
-                        onPressed: () {
-                          Navigator.push(
+                        onPressed: () async {
+                          await Navigator.push(
                             context,
                             MaterialPageRoute(
                               fullscreenDialog: true,
@@ -152,7 +152,7 @@ class _StartScreenState extends ConsumerState<StartScreen>
                             ),
                           );
                         },
-                        imageAddress: "assets/images/chatgpt_title.png",
+                        imageAddress: "assets/images/ChatGPT.svg",
                         name: "ChatGPT",
                         desc:
                             "Ask anything and ChatGPT will be\nready to answer and help you",
@@ -161,8 +161,8 @@ class _StartScreenState extends ConsumerState<StartScreen>
                       height: 20,
                     ),
                     DisplayContainer(
-                        onPressed: () {
-                          Navigator.push(
+                        onPressed: () async {
+                          await Navigator.push(
                               context,
                               MaterialPageRoute(
                                 fullscreenDialog: true,

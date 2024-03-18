@@ -2,12 +2,15 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 class TextFieldWidget extends StatefulWidget {
-  const TextFieldWidget({
-    super.key,
-    required this.onPressed,
-    required this.enableButton,
-  });
+  const TextFieldWidget(
+      {super.key,
+      required this.onPressed,
+      required this.enableButton,
+      required this.textController,
+      required this.isDisableButton});
   final bool enableButton;
+  final bool isDisableButton;
+  final TextEditingController textController;
   final void Function(String text) onPressed;
   @override
   State<TextFieldWidget> createState() => _TextFieldWidgetState();
@@ -15,13 +18,18 @@ class TextFieldWidget extends StatefulWidget {
 
 class _TextFieldWidgetState extends State<TextFieldWidget> {
   late TextEditingController textController;
-  bool isDisableButton = true;
 
   @override
   void initState() {
-    textController = TextEditingController();
-    isDisableButton = textController.text.trim().isEmpty;
+    textController = widget.textController;
+
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    textController.dispose();
+    super.dispose();
   }
 
   @override
@@ -44,9 +52,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
                   keyboardType: TextInputType.multiline,
                   style: const TextStyle(color: Colors.white),
                   onChanged: (value) {
-                    setState(() {
-                      isDisableButton = textController.text.trim().isEmpty;
-                    });
+                    setState(() {});
                   },
                   decoration: const InputDecoration(
                     filled: true,
@@ -78,26 +84,27 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
                 color: Color.fromARGB(130, 0, 0, 0),
               ),
               child: IconButton(
-                  disabledColor: const Color.fromARGB(49, 255, 255, 255),
-                  onPressed: widget.enableButton
-                      ? !isDisableButton
-                          ? () {
-                              widget.onPressed(textController.text.trim());
-                              textController.clear();
-                              setState(() {
-                                isDisableButton = true;
-                              });
-                            }
-                          : null
-                      :  null,
-                  icon: Icon(
-                    Icons.send_rounded,
-                    color: widget.enableButton
-                        ? isDisableButton
-                            ? null
-                            : Colors.white
-                        : null,
-                  )),
+                disabledColor: const Color.fromARGB(49, 255, 255, 255),
+                onPressed: widget.enableButton
+                    ? !widget.isDisableButton
+                        ? () {
+                            widget.onPressed(textController.text.trim());
+                            textController.clear();
+                            setState(() {
+                              // widget.isDisableButton = true;
+                            });
+                          }
+                        : null
+                    : null,
+                icon: Icon(
+                  Icons.send_rounded,
+                  color: widget.enableButton
+                      ? widget.isDisableButton
+                          ? null
+                          : Colors.white
+                      : null,
+                ),
+              ),
             ),
           ),
         )

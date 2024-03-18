@@ -38,28 +38,31 @@ class _ChatScreenState extends State<ChatScreen>
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: presentIndex == 0
-            ? const Hero(
-                tag: 0,
-                child: CircleAvatar(
-                  radius: 27,
-                  backgroundColor: Colors.white,
-                  foregroundImage:
-                      AssetImage("assets/images/chatgpt_title.png"),
-                ),
-              )
-            : Hero(
-                tag: 1,
-                child: CircleAvatar(
-                  radius: 27,
-                  backgroundColor: Colors.white,
-                  child: SvgPicture.asset(
-                    "assets/images/gemini_logo.svg",
-                    width: 40,
-                    height: 40,
-                  ),
-                ),
-              ),
+        title: const Text.rich(TextSpan(children: [
+          TextSpan(
+              text: "C",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 26)),
+          TextSpan(
+              text: "hat",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              )),
+          TextSpan(
+              text: "M",
+              style: TextStyle(
+                  color: Color.fromARGB(255, 180, 206, 128),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 26)),
+          TextSpan(
+              text: "ate",
+              style: TextStyle(
+                  color: Color.fromARGB(255, 180, 206, 128),
+                  fontWeight: FontWeight.bold)),
+        ])),
         bottom: TabBar(
             controller: _tabController,
             labelStyle: const TextStyle(
@@ -78,6 +81,36 @@ class _ChatScreenState extends State<ChatScreen>
               ),
             ]),
         automaticallyImplyLeading: false,
+        actions: [
+          presentIndex == 0
+              ? const Padding(
+                  padding: EdgeInsets.only(right: 8.0),
+                  child: Hero(
+                    tag: 0,
+                    child: CircleAvatar(
+                      radius: 20,
+                      backgroundColor: Colors.white,
+                      foregroundImage:
+                          AssetImage("assets/images/chatgpt_title.png"),
+                    ),
+                  ),
+                )
+              : Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: Hero(
+                    tag: 1,
+                    child: CircleAvatar(
+                      radius: 20,
+                      backgroundColor: Colors.white,
+                      child: SvgPicture.asset(
+                        fit: BoxFit.cover,
+                        width: 27,
+                        "assets/images/gemini_logo.svg",
+                      ),
+                    ),
+                  ),
+                ),
+        ],
         leading: IconButton.filled(
             style: IconButton.styleFrom(backgroundColor: Colors.white),
             onPressed: () {
