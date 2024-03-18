@@ -1,13 +1,14 @@
-import 'package:ai_chat/provider/image_provider.dart';
-import 'package:ai_chat/screens/chat_screen.dart';
-import 'package:ai_chat/widgets/start_screen_widgets/display_container.dart';
-import 'package:ai_chat/widgets/start_screen_widgets/show_profile_stack.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:local_hero/local_hero.dart';
+
+import 'package:ai_chat/provider/image_provider.dart';
+import 'package:ai_chat/screens/chat_screen.dart';
+import 'package:ai_chat/widgets/start_screen_widgets/display_container.dart';
+import 'package:ai_chat/widgets/start_screen_widgets/show_profile_stack.dart';
 
 class StartScreen extends ConsumerStatefulWidget {
   const StartScreen({super.key});

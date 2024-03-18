@@ -1,4 +1,5 @@
 import 'dart:ui';
+
 import 'package:ai_chat/widgets/start_screen_widgets/profile_details.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';

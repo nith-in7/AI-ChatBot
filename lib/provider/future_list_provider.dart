@@ -1,8 +1,12 @@
-import 'package:ai_chat/model/chat_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
+
+import 'package:ai_chat/model/chat_model.dart';
+
+
+// ---------------------------Gemini---------------------------------------
 
 Future<List<Content>> getGeminiHistory() async {
   final currentUser = FirebaseAuth.instance.currentUser!;
@@ -44,7 +48,7 @@ final geminiListProvider =
   return GeminiListNotifier([]);
 });
 
-// ------------------------------------------------------------------
+// ---------------------------ChatGPT---------------------------------------
 
 Future<List<ChatGPTModel>> getChatGPTHistory() async {
   final currentUser = FirebaseAuth.instance.currentUser!;

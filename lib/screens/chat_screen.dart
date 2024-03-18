@@ -1,7 +1,8 @@
-import 'package:ai_chat/widgets/chat_screen_widgets/chatgpt_tab_window.dart';
-import 'package:ai_chat/widgets/chat_screen_widgets/gemini_tab_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
+import 'package:ai_chat/widgets/chat_screen_widgets/chatgpt_tab_window.dart';
+import 'package:ai_chat/widgets/chat_screen_widgets/gemini_tab_window.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key, required this.startIndex});

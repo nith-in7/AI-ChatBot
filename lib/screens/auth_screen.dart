@@ -1,15 +1,13 @@
 import 'dart:ui';
 
-import 'package:ai_chat/provider/future_list_provider.dart';
-
-import 'package:ai_chat/widgets/auth_screen_widgets/card_details.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+
+import 'package:ai_chat/provider/future_list_provider.dart';
+import 'package:ai_chat/widgets/auth_screen_widgets/card_details.dart';
 
 class AuthScreen extends ConsumerWidget {
   const AuthScreen({super.key});

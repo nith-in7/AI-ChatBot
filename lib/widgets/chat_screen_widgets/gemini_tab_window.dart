@@ -1,13 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_generative_ai/google_generative_ai.dart';
+
 import 'package:ai_chat/provider/ai_provider.dart';
 import 'package:ai_chat/provider/future_list_provider.dart';
 import 'package:ai_chat/widgets/chat_screen_widgets/model_text_widget.dart';
 import 'package:ai_chat/widgets/chat_screen_widgets/text_field_widget.dart';
 import 'package:ai_chat/widgets/chat_screen_widgets/user_text_widget.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:google_generative_ai/google_generative_ai.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class GeminiTabWindow extends ConsumerStatefulWidget {
   const GeminiTabWindow({super.key});
