@@ -56,15 +56,15 @@ class MyApp extends ConsumerWidget {
 }
 
 _getAllApi(WidgetRef ref) async {
-  final gemApi = await getAPI('gemini_api');
-  ref.read(geminiKey.notifier).update((state) => gemApi);
-
-  final chatgptApi = await getAPI('chatgpt');
-  ref.read(chatGPTKey.notifier).update((state) => chatgptApi);
-
   final List<Content> geminiList = await getGeminiHistory();
   ref.read(geminiListProvider.notifier).updateState(geminiList);
 
   final List<ChatGPTModel> chatgptList = await getChatGPTHistory();
   ref.read(chatGPTListProvider.notifier).updateState(chatgptList);
+  
+  final gemApi = await getAPI('gemini_api');
+  ref.read(geminiKey.notifier).update((state) => gemApi);
+
+  final chatgptApi = await getAPI('chatgpt');
+  ref.read(chatGPTKey.notifier).update((state) => chatgptApi);
 }

@@ -5,25 +5,26 @@ import 'package:google_generative_ai/google_generative_ai.dart';
 
 import 'package:ai_chat/model/chat_model.dart';
 
-
 // ---------------------------Gemini---------------------------------------
 
 Future<List<Content>> getGeminiHistory() async {
   final currentUser = FirebaseAuth.instance.currentUser!;
-  final response = await FirebaseFirestore.instance
-      .collection(currentUser.uid)
-      .doc("chat")
-      .collection("gemini")
-      .orderBy("createdAt")
-      .get();
+  final db = FirebaseFirestore.instance;
+  final defaultPath =
+      db.collection(currentUser.uid).doc("chat").collection("gemini");
+  final lastQueary =
+      await defaultPath.orderBy("createdAt", descending: true).limit(1).get();
+  final last = lastQueary.docs.first;
+  if (last.data()['role'] == 'user') {
+    await defaultPath.doc(last.id).delete();
+  }
+  final response = await defaultPath.orderBy("createdAt").get();
 
   final List<Content> chatList = response.docs.map((e) {
     return Content(e.data()['role'], [TextPart(e.data()["content"])]);
   }).toList();
   return chatList;
 }
-
-
 
 class GeminiListNotifier extends StateNotifier<List<Content>> {
   GeminiListNotifier(super.state);
@@ -52,20 +53,25 @@ final geminiListProvider =
 
 Future<List<ChatGPTModel>> getChatGPTHistory() async {
   final currentUser = FirebaseAuth.instance.currentUser!;
-  final response = await FirebaseFirestore.instance
-      .collection(currentUser.uid)
-      .doc("chat")
-      .collection("chatgpt")
-      .orderBy("createdAt")
-      .get();
+  final db = FirebaseFirestore.instance;
+  final defaultPath =
+      db.collection(currentUser.uid).doc("chat").collection("chatgpt");
+  final lastQuery =
+      await defaultPath.orderBy('createdAt', descending: true).limit(1).get();
+  final last = lastQuery.docs.first;
+  if (last.data()['role'] == 'user') {
+    defaultPath.doc(last.id).delete();
+  }
+  final response = await defaultPath.orderBy("creatgoedAt").get();
+
   final List<ChatGPTModel> chatList = response.docs.map((e) {
     return ChatGPTModel(
         role: e.data()['role'] == "user" ? Role.user : Role.assistant,
         content: [e.data()['content']]);
   }).toList();
+
   return chatList;
 }
-
 
 class ChatGPTListNotifiier extends StateNotifier<List<ChatGPTModel>> {
   ChatGPTListNotifiier(super.state);
@@ -90,4 +96,4 @@ final chatGPTListProvider =
   return ChatGPTListNotifiier([]);
 });
 
-final authScreenLoading=StateProvider((ref) => false);
+final authScreenLoading = StateProvider((ref) => false);

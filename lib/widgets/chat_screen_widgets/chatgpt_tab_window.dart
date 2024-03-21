@@ -126,23 +126,34 @@ Future<String> getChatGPTResponse(
       )
       .toList();
 
-  final Response response = await dio.post(
-    "https://api.anthropic.com/v1/messages",
-    data: {
-      "model": "claude-3-opus-20240229",
-      "messages": [...message],
-      "max_tokens": 256,
-      // "stream": true
-    },
-    options: Options(
-      // responseType: ResponseType.stream,
-      headers: {
-        "anthropic-version": "2023-06-01",
-        "content-type": "application/json",
-        "x-api-key": api
+  try {
+    final Response response = await dio.post(
+      "https://api.anthropic.com/v1/messages",
+      data: {
+        "model": "claude-3-opus-20240229",
+        "messages": [...message],
+        "max_tokens": 256,
+        // "stream": true
       },
-    ),
-  );
-
-  return response.data["content"][0]["text"];
+      options: Options(
+        // responseType: ResponseType.stream,
+        headers: {
+          "anthropic-version": "2023-06-01",
+          "content-type": "application/json",
+          "x-api-key": api
+        },
+      ),
+    );
+    return response.data["content"][0]["text"];
+  } on DioException catch (e) {
+    return e.message ?? "An error occured.";
+  } finally {
+    final list = ref.read(chatGPTListProvider);
+    list.last.content.removeAt(0);
+    if (list.last.content.isEmpty) {
+      ref
+          .read(chatGPTListProvider.notifier)
+          .updateLastChat("Unale to generate response");
+    }
+  }
 }

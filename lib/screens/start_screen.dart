@@ -45,6 +45,7 @@ class _StartScreenState extends ConsumerState<StartScreen>
     var networkImage = ref.read(profileImageProvider);
     return Scaffold(
       body: LocalHeroScope(
+        duration: const Duration(milliseconds: 230),
         child: Container(
           height: MediaQuery.of(context).size.height,
           padding: const EdgeInsets.fromLTRB(16, 32, 16, 32),

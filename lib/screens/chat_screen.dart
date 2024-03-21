@@ -37,6 +37,12 @@ class _ChatScreenState extends State<ChatScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: Drawer(
+
+        child: ListView(
+          
+        ),
+      ),
       appBar: AppBar(
         centerTitle: true,
         title: const Text.rich(TextSpan(children: [
@@ -53,7 +59,7 @@ class _ChatScreenState extends State<ChatScreen>
                 fontWeight: FontWeight.bold,
               )),
           TextSpan(
-              text: "M",
+              text: " M",
               style: TextStyle(
                   color: Color.fromARGB(255, 180, 206, 128),
                   fontWeight: FontWeight.bold,

@@ -104,7 +104,7 @@ class AuthScreen extends ConsumerWidget {
                       ),
                     ),
                     const SizedBox(
-                      height: 20,
+                      height: 27,
                     ),
                     const CardDetails(
                       icon: Icons.psychology_outlined,
@@ -124,7 +124,7 @@ class AuthScreen extends ConsumerWidget {
                         icon: Icons.new_releases_outlined,
                         title: "Trained to decline inappropriate requests"),
                     const SizedBox(
-                      height: 40,
+                      height: 30,
                     ),
                     Align(
                       alignment: Alignment.center,
